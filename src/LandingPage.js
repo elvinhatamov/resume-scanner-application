@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { Search, Briefcase, MapPin, DollarSign, LogIn } from "lucide-react";
+import { Search, Briefcase, MapPin, DollarSign } from "lucide-react";
 import Hero from "./components/Landing/Hero";
 import Features from "./components/Landing/Features";
 import HowItWorks from "./components/Landing/HowItWorks";
 import Stats from "./components/Landing/Stats";
 import Footer from "./components/Landing/Footer";
-import ThemeToggle from "./components/Theme/ThemeToggle";
 
 export default function LandingPage() {
   const auth = useAuth();
@@ -78,27 +77,28 @@ export default function LandingPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-subtle dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900">
       {/* Header/Navbar */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b-2 border-indigo-200 dark:border-indigo-800 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="bg-transparent backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
           <div className="inline-flex items-center space-x-3">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full shadow-md">
-              <Briefcase className="text-white" size={24} />
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl shadow-lg">
+              <Briefcase className="text-white" size={28} />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Resume Matcher
-            </span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-white">
+                ResumeAI
+              </span>
+              <span className="text-xs text-gray-300">Next-Gen Career Matching</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <ThemeToggle />
             <button
               onClick={() => auth.signinRedirect()}
-              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
             >
-              <LogIn size={20} />
-              Sign In
+              ✨ Get Started
             </button>
           </div>
         </div>

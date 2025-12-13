@@ -41,7 +41,7 @@ export const ThemeProvider = ({ children }) => {
   // NOTE: Once a user manually sets a theme preference, it will be saved in localStorage
   // and the app will no longer automatically follow system theme changes.
   // This is intentional to respect the user's explicit choice.
-  // To implement auto-follow behavior, you could add a third state: 'auto'
+  // TODO: Consider implementing a third state 'auto' to allow users to opt-in to system theme following
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e) => {

@@ -1,11 +1,11 @@
 // index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
+import "./style.css";
 import App from "./App";
 import { AuthProvider } from "react-oidc-context";
 import { ThemeProvider } from "./context/ThemeContext";
-import "./index.css";
-import "./style.css";
 
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_yRZLjI1lK",

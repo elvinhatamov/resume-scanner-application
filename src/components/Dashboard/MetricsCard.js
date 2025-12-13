@@ -10,15 +10,6 @@ const MetricsCard = ({
   trendValue,
   color = 'indigo'
 }) => {
-  const colorClasses = {
-    indigo: 'from-indigo-500 to-purple-500',
-    blue: 'from-blue-500 to-cyan-500',
-    green: 'from-green-500 to-emerald-500',
-    yellow: 'from-yellow-500 to-orange-500',
-    red: 'from-red-500 to-rose-500',
-    purple: 'from-purple-500 to-pink-500',
-  };
-
   const iconBgClasses = {
     indigo: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400',
     blue: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',

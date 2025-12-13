@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader, User, Home, Target, Settings, BarChart3 } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader, User, Home, Target, BarChart3 } from 'lucide-react';
 import { useAuth } from "react-oidc-context";
 import ThemeToggle from './components/Theme/ThemeToggle';
 import EmptyState from './components/UI/EmptyState';
-import LoadingSpinner from './components/UI/LoadingSpinner';
 import MetricsCard from './components/Dashboard/MetricsCard';
 import ActivityChart from './components/Dashboard/ActivityChart';
 import SkillsChart from './components/Dashboard/SkillsChart';

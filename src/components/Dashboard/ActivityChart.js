@@ -39,6 +39,12 @@ const ActivityChart = ({ data }) => {
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData}>
+          <defs>
+            <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#6366f1" />
+              <stop offset="100%" stopColor="#a855f7" />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
           <XAxis 
             dataKey="date" 
@@ -58,12 +64,6 @@ const ActivityChart = ({ data }) => {
             dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
             activeDot={{ r: 6 }}
           />
-          <defs>
-            <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#6366f1" />
-              <stop offset="100%" stopColor="#a855f7" />
-            </linearGradient>
-          </defs>
         </LineChart>
       </ResponsiveContainer>
     </motion.div>

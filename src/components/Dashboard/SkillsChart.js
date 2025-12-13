@@ -39,6 +39,12 @@ const SkillsChart = ({ data }) => {
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
+          <defs>
+            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="100%" stopColor="#ec4899" />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
           <XAxis 
             dataKey="skill" 
@@ -58,12 +64,6 @@ const SkillsChart = ({ data }) => {
             fill="url(#barGradient)"
             radius={[8, 8, 0, 0]}
           />
-          <defs>
-            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#a855f7" />
-              <stop offset="100%" stopColor="#ec4899" />
-            </linearGradient>
-          </defs>
         </BarChart>
       </ResponsiveContainer>
     </motion.div>

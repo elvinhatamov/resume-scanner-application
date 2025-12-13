@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader, User, Home, Target, Settings } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader, User, Home, Target, Settings, BarChart3 } from 'lucide-react';
 import { useAuth } from "react-oidc-context";
+import ThemeToggle from './components/Theme/ThemeToggle';
+import EmptyState from './components/UI/EmptyState';
+import LoadingSpinner from './components/UI/LoadingSpinner';
+import MetricsCard from './components/Dashboard/MetricsCard';
+import ActivityChart from './components/Dashboard/ActivityChart';
+import SkillsChart from './components/Dashboard/SkillsChart';
+import ScoreDistribution from './components/Dashboard/ScoreDistribution';
+import RecentActivity from './components/Dashboard/RecentActivity';
 
 
 export default function ResumeUploadApp({ onAccountClick }) {
@@ -214,37 +222,42 @@ export default function ResumeUploadApp({ onAccountClick }) {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
       {/* Top Navbar */}
-      <nav className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+      <nav className="bg-white dark:bg-gray-800 border-b border-slate-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="text-xl font-bold text-indigo-600">Resume Job Matcher</div>
-          <span className="text-slate-600">Dashboard</span>
+          <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">Resume Job Matcher</div>
+          <span className="text-slate-600 dark:text-gray-400">Dashboard</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-            <User size={16} className="text-indigo-600" />
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
+            <User size={16} className="text-indigo-600 dark:text-indigo-400" />
           </div>
         </div>
       </nav>
 
       <div className="flex">
         {/* Left Sidebar */}
-        <aside className="w-64 bg-white border-r border-slate-200 min-h-[calc(100vh-73px)]">
+        <aside className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 min-h-[calc(100vh-73px)]">
           <nav className="p-4 space-y-2">
-            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${activeTab === 'dashboard' ? 'text-indigo-600 bg-indigo-50' : 'text-slate-600 hover:bg-slate-50'}`} onClick={() => setActiveTab('dashboard')}>
+            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all ${activeTab === 'dashboard' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30' : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700'}`} onClick={() => setActiveTab('dashboard')}>
               <Home size={20} />
               Dashboard
             </div>
-            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${activeTab === 'upload' ? 'text-indigo-600 bg-indigo-50' : 'text-slate-600 hover:bg-slate-50'}`} onClick={() => setActiveTab('upload')}>
+            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all ${activeTab === 'analytics' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30' : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700'}`} onClick={() => setActiveTab('analytics')}>
+              <BarChart3 size={20} />
+              Analytics
+            </div>
+            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all ${activeTab === 'upload' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30' : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700'}`} onClick={() => setActiveTab('upload')}>
               <Upload size={20} />
               Upload Resume
             </div>
-            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${activeTab === 'matches' ? 'text-indigo-600 bg-indigo-50' : 'text-slate-600 hover:bg-slate-50'}`} onClick={() => setActiveTab('matches')}>
+            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all ${activeTab === 'matches' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30' : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700'}`} onClick={() => setActiveTab('matches')}>
               <Target size={20} />
               My Matches
             </div>
-            <div className="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-lg cursor-pointer" onClick={onAccountClick}>
+            <div className="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-all" onClick={onAccountClick}>
               <User size={20} />
               Account
             </div>
@@ -254,15 +267,15 @@ export default function ResumeUploadApp({ onAccountClick }) {
         {/* Main Content */}
         <main className="flex-1 p-6">
           {activeTab === 'upload' ? (
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700">
               {/* File Upload Area */}
               <div
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${
                   file
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                    : 'border-gray-300 dark:border-gray-600 hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
                 <input
@@ -276,21 +289,21 @@ export default function ResumeUploadApp({ onAccountClick }) {
 
                 {!file ? (
                   <label htmlFor="file-upload" className="cursor-pointer">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full mb-4">
-                      <Upload className="text-indigo-600" size={32} />
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-full mb-4">
+                      <Upload className="text-indigo-600 dark:text-indigo-400" size={32} />
                     </div>
-                    <p className="text-lg font-bold text-gray-900 mb-2">
+                    <p className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                       Drop your resume here or click to browse
                     </p>
-                    <p className="text-sm text-gray-500">PDF or DOCX • Max 10MB</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">PDF or DOCX • Max 10MB</p>
                   </label>
                 ) : (
-                  <div className="flex items-center justify-between bg-white rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center space-x-3">
-                      <FileText className="text-indigo-600" size={24} />
+                      <FileText className="text-indigo-600 dark:text-indigo-400" size={24} />
                       <div>
-                        <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="font-medium text-gray-900 dark:text-white">{file.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           {(file.size / 1024 / 1024).toFixed(2)} MB
                         </p>
                       </div>
@@ -304,7 +317,7 @@ export default function ResumeUploadApp({ onAccountClick }) {
                           setProgress(0);
                           setMatches([]);
                         }}
-                        className="text-red-500 hover:text-red-700 font-medium"
+                        className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
                       >
                         Remove
                       </button>
@@ -316,11 +329,11 @@ export default function ResumeUploadApp({ onAccountClick }) {
               {/* Progress Bar */}
               {status === 'uploading' && (
                 <div className="mt-6">
-                  <div className="flex justify-between text-sm font-medium text-gray-700 mb-2">
+                  <div className="flex justify-between text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <span>Processing your resume...</span>
-                    <span className="text-indigo-600">{progress}%</span>
+                    <span className="text-indigo-600 dark:text-indigo-400">{progress}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-sm">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-sm">
                     <div
                       className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 h-full transition-all duration-300 rounded-full shadow-lg"
                       style={{ width: `${progress}%` }}
@@ -334,28 +347,28 @@ export default function ResumeUploadApp({ onAccountClick }) {
                 <div
                   className={`mt-6 p-4 rounded-lg whitespace-pre-line flex items-start space-x-3 border-l-4 ${
                     status === 'success'
-                      ? 'bg-green-50 border-green-500'
+                      ? 'bg-green-50 dark:bg-green-900/20 border-green-500'
                       : status === 'error'
-                      ? 'bg-red-50 border-red-500'
-                      : 'bg-blue-50 border-blue-500'
+                      ? 'bg-red-50 dark:bg-red-900/20 border-red-500'
+                      : 'bg-blue-50 dark:bg-blue-900/20 border-blue-500'
                   }`}
                 >
                   {status === 'success' && (
-                    <CheckCircle className="text-green-600 flex-shrink-0" size={24} />
+                    <CheckCircle className="text-green-600 dark:text-green-400 flex-shrink-0" size={24} />
                   )}
                   {status === 'error' && (
-                    <AlertCircle className="text-red-600 flex-shrink-0" size={24} />
+                    <AlertCircle className="text-red-600 dark:text-red-400 flex-shrink-0" size={24} />
                   )}
                   {status === 'uploading' && (
-                    <Loader className="text-indigo-600 flex-shrink-0 animate-spin" size={24} />
+                    <Loader className="text-indigo-600 dark:text-indigo-400 flex-shrink-0 animate-spin" size={24} />
                   )}
                   <p
                     className={`text-sm font-medium ${
                       status === 'success'
-                        ? 'text-green-800'
+                        ? 'text-green-800 dark:text-green-200'
                         : status === 'error'
-                        ? 'text-red-800'
-                        : 'text-blue-800'
+                        ? 'text-red-800 dark:text-red-200'
+                        : 'text-blue-800 dark:text-blue-200'
                     }`}
                   >
                     {message}
@@ -368,7 +381,7 @@ export default function ResumeUploadApp({ onAccountClick }) {
                 <button
                   onClick={handleUpload}
                   disabled={!file || status === 'uploading'}
-                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400 transition"
+                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 transition"
                 >
                   {status === 'uploading' ? (
                     <span className="flex items-center justify-center">
@@ -384,9 +397,65 @@ export default function ResumeUploadApp({ onAccountClick }) {
                 </button>
               </div>
             </div>
+          ) : activeTab === 'analytics' ? (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Analytics Dashboard</h2>
+                <p className="text-gray-600 dark:text-gray-400">Track your resume scanning activity and insights</p>
+              </div>
+
+              {/* Key Metrics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <MetricsCard 
+                  title="Total Resumes"
+                  value="24"
+                  icon={FileText}
+                  trend="up"
+                  trendValue="+12%"
+                  color="indigo"
+                />
+                <MetricsCard 
+                  title="Avg Match Score"
+                  value="82%"
+                  icon={Target}
+                  trend="up"
+                  trendValue="+5%"
+                  color="green"
+                />
+                <MetricsCard 
+                  title="Recent Activity"
+                  value="8"
+                  icon={BarChart3}
+                  trend="up"
+                  trendValue="+2"
+                  color="blue"
+                />
+                <MetricsCard 
+                  title="Success Rate"
+                  value="94%"
+                  icon={CheckCircle}
+                  trend="up"
+                  trendValue="+3%"
+                  color="purple"
+                />
+              </div>
+
+              {/* Charts Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <ActivityChart />
+                <SkillsChart />
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div className="lg:col-span-2">
+                  <RecentActivity />
+                </div>
+                <ScoreDistribution />
+              </div>
+            </div>
           ) : activeTab === 'matches' ? (
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">My Matches</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">My Matches</h2>
               {matches.length > 0 ? (
                 <div className="space-y-4">
                   {matches.map((m) => {
@@ -401,29 +470,29 @@ export default function ResumeUploadApp({ onAccountClick }) {
                     const skills = Array.isArray(m.skills) ? m.skills : (m.tags || []);
 
                     return (
-                      <div key={m.jobId || m.id || m.url} className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                      <div key={m.jobId || m.id || m.url} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h3 className="text-lg font-semibold text-slate-900">{m.title}</h3>
-                            <p className="text-slate-600">{company} • {location}</p>
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{m.title}</h3>
+                            <p className="text-slate-600 dark:text-gray-400">{company} • {location}</p>
                           </div>
                           <div className="text-right">
-                            <div className={`text-2xl font-bold ${score >= 75 ? 'text-emerald-600' : score >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>{score}% match</div>
+                            <div className={`text-2xl font-bold ${score >= 75 ? 'text-emerald-600 dark:text-emerald-400' : score >= 50 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'}`}>{score}% match</div>
                           </div>
                         </div>
-                        <p className="text-slate-700 mb-4">{m.summary || m.excerpt || 'No summary available.'}</p>
+                        <p className="text-slate-700 dark:text-gray-300 mb-4">{m.summary || m.excerpt || 'No summary available.'}</p>
                         {skills.length > 0 && (
                           <div className="flex flex-wrap gap-2 mb-4">
                             {skills.slice(0, 6).map((s, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs">{s}</span>
+                              <span key={idx} className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 rounded-full text-xs">{s}</span>
                             ))}
                           </div>
                         )}
                         <div className="flex justify-between items-center">
                           {m.url ? (
-                            <a href={m.url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-700 font-medium">View & Apply →</a>
+                            <a href={m.url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">View & Apply →</a>
                           ) : (
-                            <span className="text-slate-500">No external link</span>
+                            <span className="text-slate-500 dark:text-gray-500">No external link</span>
                           )}
                           <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Save</button>
                         </div>
@@ -432,76 +501,100 @@ export default function ResumeUploadApp({ onAccountClick }) {
                   })}
                 </div>
               ) : (
-                <p className="text-slate-600">No matches yet. Upload a resume to get started.</p>
+                <EmptyState 
+                  icon={Target}
+                  title="No Matches Yet"
+                  description="Upload your resume to get personalized job matches tailored to your skills and experience"
+                  action={() => setActiveTab('upload')}
+                  actionLabel="Upload Resume"
+                />
               )}
             </div>
           ) : (
             <>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h2>
+                <p className="text-gray-600 dark:text-gray-400">Overview of your resume scanning activity</p>
+              </div>
+
               {/* Metrics Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                  <div className="text-2xl font-bold text-slate-900">5</div>
-                  <div className="text-slate-600">Resumes Uploaded</div>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                  <div className="text-2xl font-bold text-slate-900">{matches.length}</div>
-                  <div className="text-slate-600">Job Matches</div>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                  <div className="text-2xl font-bold text-slate-900">Today</div>
-                  <div className="text-slate-600">Last Updated</div>
-                </div>
+                <MetricsCard 
+                  title="Resumes Uploaded"
+                  value="5"
+                  icon={FileText}
+                  color="indigo"
+                />
+                <MetricsCard 
+                  title="Job Matches"
+                  value={matches.length.toString()}
+                  icon={Target}
+                  color="green"
+                />
+                <MetricsCard 
+                  title="Last Updated"
+                  value="Today"
+                  icon={CheckCircle}
+                  color="blue"
+                />
               </div>
 
               {/* Recent Resumes Card */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 mb-6">
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Resumes</h3>
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 mb-6">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Recent Resumes</h3>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-gray-700 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <FileText size={20} className="text-slate-600" />
+                      <FileText size={20} className="text-slate-600 dark:text-gray-400" />
                       <div>
-                        <div className="font-medium text-slate-900">resume.pdf</div>
-                        <div className="text-sm text-slate-600">Uploaded 2 days ago</div>
+                        <div className="font-medium text-slate-900 dark:text-white">resume.pdf</div>
+                        <div className="text-sm text-slate-600 dark:text-gray-400">Uploaded 2 days ago</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs">Parsed</span>
-                      <button className="text-indigo-600 hover:text-indigo-800">View</button>
+                      <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full text-xs">Parsed</span>
+                      <button className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">View</button>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Top Matches Card */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Top Matches</h3>
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Top Matches</h3>
                 <div className="space-y-4">
-                  {matches.slice(0, 5).map((m) => {
+                  {matches.length > 0 ? matches.slice(0, 5).map((m) => {
                     let score = m.match_score;
                     if (typeof score === 'number') {
                       if (score <= 1) score = Math.round(score * 100);
                       else score = Math.round(score);
                     }
                     return (
-                      <div key={m.jobId || m.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
+                      <div key={m.jobId || m.id} className="flex items-center justify-between p-4 border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                            <Target size={24} className="text-indigo-600" />
+                          <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                            <Target size={24} className="text-indigo-600 dark:text-indigo-400" />
                           </div>
                           <div>
-                            <div className="font-medium text-slate-900">{m.title}</div>
-                            <div className="text-sm text-slate-600">{m.company || m.employer}</div>
+                            <div className="font-medium text-slate-900 dark:text-white">{m.title}</div>
+                            <div className="text-sm text-slate-600 dark:text-gray-400">{m.company || m.employer}</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-emerald-600">{score}%</div>
-                          <button className="text-indigo-600 hover:text-indigo-800">Apply</button>
+                          <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{score}%</div>
+                          <button className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">Apply</button>
                         </div>
                       </div>
                     );
-                  })}
-                  {matches.length === 0 && <p className="text-slate-600">No matches yet. Upload a resume to see top matches.</p>}
+                  }) : (
+                    <EmptyState 
+                      icon={Target}
+                      title="No Matches Yet"
+                      description="Upload your resume to see your top job matches"
+                      action={() => setActiveTab('upload')}
+                      actionLabel="Upload Resume"
+                    />
+                  )}
                 </div>
               </div>
             </>

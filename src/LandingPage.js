@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Search, Briefcase, MapPin, DollarSign, LogIn } from "lucide-react";
+import Hero from "./components/Landing/Hero";
+import Features from "./components/Landing/Features";
+import HowItWorks from "./components/Landing/HowItWorks";
+import Stats from "./components/Landing/Stats";
+import Footer from "./components/Landing/Footer";
+import ThemeToggle from "./components/Theme/ThemeToggle";
 
 export default function LandingPage() {
   const auth = useAuth();
@@ -72,42 +78,43 @@ export default function LandingPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-gradient-subtle dark:bg-gray-900">
       {/* Header/Navbar */}
-      <div className="bg-white shadow-sm border-b-2 border-indigo-200">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b-2 border-indigo-200 dark:border-indigo-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="inline-flex items-center space-x-3">
             <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full shadow-md">
               <Briefcase className="text-white" size={24} />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Job Matcher
+              Resume Matcher
             </span>
           </div>
 
-          <button
-            onClick={() => auth.signinRedirect()}
-            className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
-          >
-            <LogIn size={20} />
-            Sign In
-          </button>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <button
+              onClick={() => auth.signinRedirect()}
+              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+            >
+              <LogIn size={20} />
+              Sign In
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-indigo-600 via-purple-600 to-pink-600 py-20 text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full translate-x-1/2 translate-y-1/2" />
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <h1 className="text-6xl font-black mb-4 leading-tight">
-            Find Your Perfect Job Match
-          </h1>
-          <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
-            Upload your resume and get AI-powered job recommendations tailored to your skills
-          </p>
-        </div>
-      </div>
+      <Hero onGetStarted={() => auth.signinRedirect()} />
+
+      {/* Features Section */}
+      <Features />
+
+      {/* How It Works Section */}
+      <HowItWorks />
+
+      {/* Stats Section */}
+      <Stats />
 
       {/* Search & Filter Section */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -212,9 +219,7 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-8 text-center">
-        <p>&copy; 2025 Resume Job Matcher. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

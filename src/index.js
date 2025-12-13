@@ -10,11 +10,16 @@ import { ThemeProvider } from "./context/ThemeContext";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_yRZLjI1lK",
   client_id: "1hj5ncp9olo3kdpi5t5bjshjgb",
-  redirect_uri: "http://localhost:3000",
+  redirect_uri: window.location.origin,
+  post_logout_redirect_uri: window.location.origin,
   response_type: "code",
   scope: "email openid phone",
   onSigninCallback: (user) => {
     window.history.replaceState({}, document.title, window.location.pathname);
+  },
+  onSignoutCallback: () => {
+    localStorage.clear();
+    window.location.href = window.location.origin;
   },
 };
 

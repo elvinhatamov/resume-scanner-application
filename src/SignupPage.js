@@ -2,7 +2,7 @@ import React from "react";
 
 export default function SignupPage({ onLogin }) {
   const clientId = "1hj5ncp9olo3kdpi5t5bjshjgb";
-  const redirectUri = "http://localhost:3000"; 
+  const redirectUri = window.location.origin;
   const domain = "https://us-east-1yrzlji1lk.auth.us-east-1.amazoncognito.com";
 
   const goToCognitoSignup = () => {

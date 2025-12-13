@@ -1,11 +1,26 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
-import { User, Home, Upload, Target } from "lucide-react";
+import { User, Home, Upload, Target, LogOut } from "lucide-react";
 
 export default function AccountPage({ onBack }) {
   const auth = useAuth();
 
   const userName = auth.user?.profile?.name || "User";
+  const logoutUri = window.location.origin;
+
+  const handleSignOut = async () => {
+    try {
+      // Clear any stored data and sign out at Cognito so session cookies are cleared
+      localStorage.clear();
+      sessionStorage.clear();
+      await auth.signoutRedirect({ post_logout_redirect_uri: logoutUri });
+    } catch (error) {
+      console.error('Sign out error:', error);
+      // Fallback: remove local session and redirect home
+      await auth.removeUser().catch(() => {});
+      window.location.href = logoutUri;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -98,6 +113,18 @@ export default function AccountPage({ onBack }) {
                 <p className="text-slate-900">Google, LinkedIn</p>
               </div>
             </div>
+          </div>
+
+          {/* Sign Out Card */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 mt-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Sign Out</h3>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition"
+            >
+              <LogOut size={20} />
+              Sign Out
+            </button>
           </div>
         </main>
       </div>

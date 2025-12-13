@@ -1,86 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useAuth } from "react-oidc-context";
-import { User, Phone, LogOut, ArrowLeft, Settings, FileText, Download, Calendar, HardDrive, Home, Upload, Target } from "lucide-react";
+import { User, Home, Upload, Target } from "lucide-react";
 
 export default function AccountPage({ onBack }) {
   const auth = useAuth();
-  const [activeTab, setActiveTab] = useState("profile");
-  const [savedJobs, setSavedJobs] = useState([]);
-  const [userResumes, setUserResumes] = useState([]);
-  const [resumesLoading, setResumesLoading] = useState(false);
-  const [resumesError, setResumesError] = useState("");
 
   const userName = auth.user?.profile?.name || "User";
-  const userPhone = auth.user?.profile?.phone_number || "Not provided";
-
-  const handleSignOut = () => {
-    const clientId = "1hj5ncp9olo3kdpi5t5bjshjgb";
-    const logoutUri = "http://localhost:3000";
-    const cognitoDomain = "https://us-east-1yrzlji1lk.auth.us-east-1.amazoncognito.com";
-    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
-  };
-
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem("savedJobs") || "[]");
-      setSavedJobs(Array.isArray(saved) ? saved : []);
-    } catch (e) {
-      setSavedJobs([]);
-    }
-  }, []);
-
-  const removeSaved = (id) => {
-    const updated = (savedJobs || []).filter((s) => s.id !== id);
-    setSavedJobs(updated);
-    localStorage.setItem("savedJobs", JSON.stringify(updated));
-  };
-
-  // API
-  const API_BASE = "https://uvrpukveqb.execute-api.us-east-1.amazonaws.com/dev";
-  const GET_USER_RESUMES = `${API_BASE}/get-user-resumes`;
-
-  const fetchUserResumes = async () => {
-    if (!auth?.user?.profile?.sub) return;
-    setResumesLoading(true);
-    setResumesError("");
-    try {
-      const userSub = auth.user.profile.sub;
-      const res = await fetch(`${GET_USER_RESUMES}?user_sub=${encodeURIComponent(userSub)}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.user?.id_token}`,
-        },
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || res.statusText || 'Failed to fetch resumes');
-      }
-
-      const data = await res.json();
-      setUserResumes(data.resumes || []);
-    } catch (e) {
-      console.error('Error loading resumes:', e);
-      setResumesError(e.message || 'Failed to load resumes');
-    } finally {
-      setResumesLoading(false);
-    }
-  };
-
-  // Fetch resumes when the tab becomes active
-  useEffect(() => {
-    if (activeTab === 'resumes') {
-      fetchUserResumes();
-    }
-  }, [activeTab, auth?.user?.profile?.sub]);
-
-  // Pre-fetch resumes when user signs in
-  useEffect(() => {
-    if (auth?.user?.profile?.sub) {
-      fetchUserResumes();
-    }
-  }, [auth?.user?.profile?.sub]);
 
   return (
     <div className="min-h-screen bg-slate-50">

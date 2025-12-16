@@ -13,7 +13,12 @@ export default function AccountPage({ onBack }) {
       // Clear any stored data and sign out at Cognito so session cookies are cleared
       localStorage.clear();
       sessionStorage.clear();
-      await auth.signoutRedirect({ post_logout_redirect_uri: logoutUri });
+      await auth.signoutRedirect({
+        post_logout_redirect_uri: logoutUri,
+        extraQueryParams: {
+          logout_uri: logoutUri,
+        },
+      });
     } catch (error) {
       console.error('Sign out error:', error);
       // Fallback: remove local session and redirect home

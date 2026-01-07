@@ -1,0 +1,20 @@
+# Screenshots Directory
+
+This directory should contain the following screenshots:
+
+1. 01-job-matches-dashboard.png - Job matches dashboard showing percentage matches
+2. 02-resume-upload-success.png - Resume upload success screen
+3. 03-sign-up-page.png - User sign-up page
+4. 04-sign-in-page.png - User sign-in page
+5. 05-landing-page-hero.png - Landing page hero section
+6. 06-api-postman-testing.png - API testing with Postman
+7. 07-aws-internet-gateway.png - AWS Internet Gateway configuration
+8. 08-aws-vpc-configuration.png - AWS VPC setup
+9. 09-aws-api-gateway-resources.png - AWS API Gateway resources
+10. 10-aws-rds-aurora-database.png - AWS RDS Aurora database
+11. 11-aws-lambda-test-event.png - AWS Lambda test event
+12. 12-aws-lambda-function-overview.png - AWS Lambda function overview
+13. 13-aws-lambda-functions-list.png - AWS Lambda functions list
+14. 14-aws-cognito-user-pool.png - AWS Cognito user pool
+
+Please add the actual screenshot images to this directory.

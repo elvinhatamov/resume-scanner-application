@@ -261,7 +261,7 @@ ResumeAI is built on a modern, serverless architecture that ensures scalability,
 Before you begin, ensure you have the following installed:
 
 ```bash
-- Node.js (v18 or higher)
+- Node.js (v22.x or higher, matching Lambda runtime)
 - npm (v8 or higher) or yarn
 - Git
 - AWS Account (for deployment)

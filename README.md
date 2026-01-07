@@ -1,70 +1,304 @@
-# Getting Started with Create React App
+# ResumeAI - AI-Powered Resume Scanner & Job Matching Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![AWS](https://img.shields.io/badge/AWS-Cloud-orange.svg)](https://aws.amazon.com/)
+[![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 
-## Available Scripts
+## 📋 Project Requirements
 
-In the project directory, you can run:
+ResumeAI is a full-stack web application designed to solve the modern job search challenge by automatically matching candidates with relevant job opportunities based on their resume content. The system was built to meet the following requirements:
 
-### `npm start`
+### Core Requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Resume Upload & Parsing**
+   - Accept PDF resume uploads from authenticated users
+   - Parse resume content to extract skills, experience, and qualifications
+   - Store parsed data in a relational database for future matching
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **Intelligent Job Matching**
+   - Compare resume content against available job descriptions
+   - Calculate percentage-based match scores using AI algorithms
+   - Rank and display top matching opportunities for each candidate
 
-### `npm test`
+3. **User Authentication & Security**
+   - Secure user registration and login system
+   - Protected API endpoints with JWT token authentication
+   - User-specific resume storage and match history
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. **Scalable Cloud Infrastructure**
+   - Serverless architecture to handle variable load
+   - High availability with multi-AZ database deployment
+   - Cost-effective pay-per-use model for compute resources
 
-### `npm run build`
+5. **Interactive User Interface**
+   - Modern, responsive web application
+   - Real-time feedback during resume upload and processing
+   - Dashboard to view match scores and job details
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔄 System Architecture & Data Flow
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application follows a serverless microservices architecture on AWS, with data flowing through the following stages:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Data Flow Diagram
 
-### `npm run eject`
+```
+┌─────────────┐
+│   User's    │
+│   Browser   │
+│  (React.js) │
+└──────┬──────┘
+       │
+       │ 1. User uploads PDF resume
+       │
+       ▼
+┌─────────────────────────────────────┐
+│     AWS API Gateway (REST API)      │
+│  - Authenticates via Cognito JWT    │
+│  - Routes requests to Lambda        │
+└──────────┬──────────────────────────┘
+           │
+           │ 2. Invokes Lambda function
+           │
+           ▼
+┌──────────────────────────────────────┐
+│      AWS Lambda: uploadResume        │
+│  - Generates presigned S3 URL        │
+│  - Returns upload URL to client      │
+└──────────┬───────────────────────────┘
+           │
+           │ 3. Client uploads file to S3
+           │
+           ▼
+┌──────────────────────────────────────┐
+│         AWS S3 Bucket                │
+│  - Stores resume PDF files           │
+│  - Bucket: elvin-resumeai-api        │
+└──────────┬───────────────────────────┘
+           │
+           │ 4. Lambda parses resume
+           │
+           ▼
+┌──────────────────────────────────────┐
+│    AWS Lambda: parse-resume          │
+│  - Downloads file from S3            │
+│  - Extracts text from PDF            │
+│  - Parses skills & experience        │
+│  - Stores in database                │
+└──────────┬───────────────────────────┘
+           │
+           │ 5. Saves parsed data
+           │
+           ▼
+┌──────────────────────────────────────┐
+│   AWS RDS Aurora (PostgreSQL)        │
+│  - Stores resume content             │
+│  - Stores job descriptions           │
+│  - Multi-AZ for high availability    │
+└──────────┬───────────────────────────┘
+           │
+           │ 6. Triggers job matching
+           │
+           ▼
+┌──────────────────────────────────────┐
+│  AWS Lambda: resume-match-all-jobs   │
+│  - Retrieves all job descriptions    │
+│  - Compares with resume content      │
+│  - Calculates match percentages      │
+│  - Returns ranked job matches        │
+└──────────┬───────────────────────────┘
+           │
+           │ 7. Returns results to client
+           │
+           ▼
+┌──────────────────────────────────────┐
+│       User Dashboard (React)         │
+│  - Displays job matches              │
+│  - Shows match percentages           │
+│  - Provides match explanations       │
+└──────────────────────────────────────┘
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Key Components
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Frontend**: React.js single-page application with responsive design
+- **API Gateway**: RESTful API with 6 resources and Lambda proxy integration
+- **Compute**: 7 Lambda functions handling different operations (Node.js 22.x/24.x)
+- **Database**: RDS Aurora PostgreSQL with multi-AZ deployment
+- **Storage**: S3 bucket for resume PDF files
+- **Authentication**: AWS Cognito user pools with 23+ registered users
+- **Networking**: VPC with public/private subnets and Internet Gateway
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📸 Application Interface
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The image below shows the landing page of the ResumeAI application, demonstrating the user-facing interface and core value proposition:
 
-## Learn More
+![ResumeAI Landing Page](./screenshots/landing-page.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### What This Screenshot Shows
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This landing page demonstrates several key aspects of the application:
 
-### Code Splitting
+1. **Clean, Professional Design**: The interface uses a modern, purple-themed design that is visually appealing and professional, making a strong first impression for job seekers.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. **Clear Value Proposition**: The headline "Stop Getting Ghosted. Start Getting Offers" immediately communicates the problem the application solves - helping candidates get matched with jobs instead of being ignored.
 
-### Analyzing the Bundle Size
+3. **User-Friendly Navigation**: The top navigation bar provides easy access to key features:
+   - Resume Optimizer - for improving resume content
+   - Career Advice - for guidance and tips
+   - Jobs & Internships - for browsing opportunities
+   - For Employers - separate portal for companies
+   - Sign Up/Log In - authentication entry points
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. **Job Matching Preview**: The right side shows a preview of the matching interface, displaying:
+   - Company logos (eBay example)
+   - Job titles ("Junior Front End Developer")
+   - Location information (Detroit, MI / Los Angeles, CA)
+   - Job type (Full-Time, Hybrid)
+   - Salary range ($95,000/year Max)
+   - Industry tags (Automotive, Software Development)
 
-### Making a Progressive Web App
+5. **Call-to-Action Buttons**: Two prominent CTAs encourage user engagement:
+   - "Log In" - for returning users
+   - "Create Your Free Profile" - for new user acquisition
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Technical Implementation
 
-### Advanced Configuration
+The landing page is built using:
+- **React.js** for component-based UI
+- **Tailwind CSS** for responsive styling
+- **Framer Motion** for smooth animations
+- **Lucide React** icons for visual elements
+- Hosted on AWS with CloudFront CDN for fast global delivery
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+When a user clicks "Sign Up" or "Log In", they are authenticated through AWS Cognito, which manages user pools and provides secure JWT tokens for API access. Once authenticated, users can upload their resume and receive AI-powered job matches based on their skills and experience.
 
-### Deployment
+## 🛠️ Technology Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Frontend
+- React.js 19.2.0
+- JavaScript (ES6+)
+- Tailwind CSS 3.4.1
+- Framer Motion 12.23.26
+- Lucide React 0.553.0
 
-### `npm run build` fails to minify
+### Backend
+- Node.js 22.x/24.x
+- AWS Lambda (serverless functions)
+- AWS API Gateway (REST API)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Database & Storage
+- AWS RDS Aurora (PostgreSQL)
+- AWS S3 (resume file storage)
+
+### Authentication
+- AWS Cognito (user pools)
+- JWT tokens
+
+### Infrastructure
+- AWS VPC with public/private subnets
+- AWS Internet Gateway
+- AWS CloudWatch (monitoring)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+```bash
+- Node.js (v22.x or higher, matching Lambda runtime)
+- npm (v8 or higher) or yarn
+- Git
+- AWS Account (for deployment)
+- AWS CLI (configured with credentials)
+```
+
+### Local Development Setup
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/elvinhatamov/resume-scanner-application.git
+cd resume-scanner-application
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Configure environment variables**
+
+Create a `.env` file in the project root (see `.env.example` for template):
+
+```env
+# API Gateway endpoint URL for backend services
+REACT_APP_API_URL=your-api-gateway-url
+
+# AWS Cognito User Pool ID for authentication
+REACT_APP_COGNITO_USER_POOL_ID=your-cognito-pool-id
+
+# AWS Cognito App Client ID for OAuth flow
+REACT_APP_COGNITO_CLIENT_ID=your-cognito-client-id
+
+# AWS Region where resources are deployed
+REACT_APP_AWS_REGION=us-east-1
+```
+
+4. **Start the development server**
+
+```bash
+npm start
+```
+
+5. **Open your browser at** [http://localhost:3000](http://localhost:3000)
+
+### Available Scripts
+
+- `npm start` - Run development server
+- `npm test` - Run tests
+- `npm run build` - Build for production
+
+## 📡 API Endpoints
+
+The application uses the following REST API endpoints:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/upload` | Generate presigned URL for resume upload |
+| POST | `/parse-resume` | Parse uploaded resume content |
+| POST | `/match-all` | Match resume against all jobs |
+| POST | `/job-matching` | Match resume with specific job |
+| GET | `/get-resumes` | Retrieve user's resumes |
+| POST | `/import-jobs` | Import job descriptions |
+
+All endpoints require authentication via JWT token in the `Authorization` header.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Elvin Hatamov**
+
+- GitHub: [@elvinhatamov](https://github.com/elvinhatamov)
+- LinkedIn: [Connect with me](https://www.linkedin.com/in/elvinhatamov)
+
+---
+
+⭐ **Star this repository if you find it helpful!**
+
+Made with ❤️ and ☕ by Elvin Hatamov
+
+*Built with React, AWS Lambda, and a passion for connecting talent with opportunities*

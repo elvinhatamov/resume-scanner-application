@@ -232,9 +232,16 @@ npm install
 Create a `.env` file in the project root (see `.env.example` for template):
 
 ```env
+# API Gateway endpoint URL for backend services
 REACT_APP_API_URL=your-api-gateway-url
+
+# AWS Cognito User Pool ID for authentication
 REACT_APP_COGNITO_USER_POOL_ID=your-cognito-pool-id
+
+# AWS Cognito App Client ID for OAuth flow
 REACT_APP_COGNITO_CLIENT_ID=your-cognito-client-id
+
+# AWS Region where resources are deployed
 REACT_APP_AWS_REGION=us-east-1
 ```
 
